@@ -74,14 +74,17 @@ impl User {
         &self.formkey
     }
 
+    /// The user's name.
     pub fn name(&self) -> &String {
         &self.name
     }
 
+    /// The school the user goes to.
     pub fn school(&self) -> &String {
         &self.school
     }
 
+    /// The type of the user account. See more in the UserType enum.
     pub fn user_type(&self) -> &UserType {
         &self.user_type
     }

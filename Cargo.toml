@@ -7,6 +7,16 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.56"
+serde_json = "1.0.79"
+scraper = "0.12.0"
+
+[dependencies.serde]
+version = "1.0.136"
+features = ["derive"]
+
+[dependencies.reqwest]
+version = "0.11.10"
+features = ["cookies"]
 
 [dependencies.tokio]
 version = "1.17.0"

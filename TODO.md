@@ -1,1 +1,4 @@
+- [ ] Profile
+- [ ] Schedule
+
 - [x] Login

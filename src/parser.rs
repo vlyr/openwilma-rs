@@ -1,4 +1,4 @@
-pub mod profile {
+pub mod user {
     use super::utils::*;
     use scraper::{Html, Selector};
 

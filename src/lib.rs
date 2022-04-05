@@ -46,5 +46,7 @@ mod tests {
         };
 
         let client = Client::login(credentials).await.unwrap();
+
+        println!("{:#?}", client.get_user_profile().await.unwrap());
     }
 }

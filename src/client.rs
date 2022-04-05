@@ -83,15 +83,31 @@ impl Client {
         // Get an "identity" string which is appended to the base URL.
         let res = client.get(url.clone()).send().await?.text().await?;
         let identity = parser::core::parse_identity(&res);
-        url += &identity;
+
+        let appended_url = format!("{}/{}", url, identity);
 
         Ok(Self {
-            base_url: url,
+            base_url: appended_url,
             http: client,
         })
     }
 
-    pub async fn get_user_profile(&self) -> User {
-        todo!()
+    pub async fn get_user_profile(&self) -> anyhow::Result<User> {
+        // Sending a GET request to the index gives you a page with your profile information.
+        let response = self
+            .http
+            .get(self.base_url.clone())
+            .send()
+            .await?
+            .text()
+            .await?;
+
+        use parser::user as parser;
+
+        let name = parser::parse_name(&response);
+        let school = parser::parse_school(&response);
+        let formkey = parser::parse_formkey(&response);
+
+        Ok(User::new(name, school, formkey))
     }
 }

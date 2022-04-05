@@ -1,3 +1,4 @@
+/// A user type enum. Check each field to check out what they represent.
 #[derive(Debug, Clone)]
 pub enum UserType {
     /// Teacher
@@ -69,7 +70,7 @@ impl User {
     }
 
     /// A formkey is like a CSRF token, but only changes when logging in and out.
-    /// A formkey has the structure `usertype:userid:sessiontoken/key`.
+    /// It has the structure `user_type:user_id:session_token/key`.
     pub fn formkey(&self) -> &String {
         &self.formkey
     }

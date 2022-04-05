@@ -1,6 +1,8 @@
 // soon
 use crate::{
-    parser, utils, wilma::IndexResponse, wilma::Schedule, wilma::User, Error as WilmaError,
+    parser, utils,
+    wilma::{IndexResponse, Overview, Schedule, User},
+    Error as WilmaError,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str as string_to_json, Value};
@@ -36,7 +38,7 @@ impl Client {
         let http_builder = reqwest::Client::builder().redirect(Policy::none());
         let http = http_builder.build()?;
 
-        let mut url = utils::verify_url(&credentials.server);
+        let url = utils::verify_url(&credentials.server);
 
         let index_path = format!("{}/index_json", url);
 
@@ -130,5 +132,16 @@ impl Client {
         println!("{:#?}", schedule);
 
         Ok(())
+    }
+
+    pub async fn get_overview(&self) -> anyhow::Result<Overview> {
+        let url = &format!("{}overview", self.base_url.clone());
+        let response = self.http.get(url).send().await?.text().await?;
+
+        let debug_json: Value = serde_json::from_str(&response).unwrap();
+
+        println!("{}", serde_json::to_string_pretty(&debug_json).unwrap());
+
+        Ok(serde_json::from_str(&response)?)
     }
 }

@@ -62,4 +62,19 @@ mod tests {
 
         client.get_user_schedule().await.unwrap();
     }
+
+    #[tokio::test]
+    async fn overview() {
+        let credentials = Credentials {
+            username: &env::var("USERNAME").unwrap(),
+            password: &env::var("PASSWORD").unwrap(),
+            server: &env::var("SERVER").unwrap(),
+        };
+
+        let client = Client::login(credentials).await.unwrap();
+
+        let overview = client.get_overview().await.unwrap();
+
+        println!("{:#?}", overview);
+    }
 }

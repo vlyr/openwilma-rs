@@ -6,6 +6,15 @@ pub use user::User;
 pub mod schedule;
 pub use schedule::Schedule;
 
+pub mod overview;
+pub use overview::Overview;
+
+pub mod exam;
+pub use exam::Exam;
+
+pub mod group;
+pub use group::Group;
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all(deserialize = "PascalCase"))]
 pub struct IndexResponse {

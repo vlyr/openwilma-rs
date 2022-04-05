@@ -59,8 +59,11 @@ impl From<u32> for Weekday {
 /// A time struct for creating abstractions around reservation start times.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Time {
-    hours: u32,
-    minutes: u32,
+    /// The hour the time is at (for example, the time 13:50 is at hour 13).
+    pub hours: u32,
+
+    /// The minute the time is at (for example, the time 13:50 is at minute 50).
+    pub minutes: u32,
 }
 
 impl Time {
@@ -73,16 +76,6 @@ impl Time {
         };
 
         format!("{}:{}", self.hours, minutes_fmt)
-    }
-
-    /// The hour the time is at (for example, the time 13:50 is at hour 13).
-    pub fn hours(&self) -> u32 {
-        self.hours
-    }
-
-    /// The minute the time is at (for example, the time 13:50 is at minute 50).
-    pub fn minutes(&self) -> u32 {
-        self.minutes
     }
 }
 
@@ -201,10 +194,10 @@ impl Room {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "PascalCase"))]
 pub struct Teacher {
-    caption: String,
-    id: u32,
-    long_caption: String,
-    schedule_visible: bool,
+    pub caption: String,
+    pub id: u32,
+    pub long_caption: String,
+    pub schedule_visible: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -212,29 +205,30 @@ pub struct Teacher {
 pub struct Reservation {
     /// The weekday the reservation is in.
     #[serde(rename(deserialize = "Day"))]
-    weekday: Weekday,
+    pub weekday: Weekday,
 
     /// The classes from which students participating in the reservation are in.
-    class: String,
+    pub class: String,
 
     /// The color for the class used in Wilma's UI
-    color: String,
+    pub color: Option<String>,
 
     /// The time when the reservation ends.
     #[serde(deserialize_with = "deserialize_time")]
-    end: Time,
+    pub end: Time,
 
-    groups: Vec<Group>,
+    /// Groups that are participating in the reservation.
+    pub groups: Vec<Group>,
 
     /// The ID of the schedule the reservation is in.
     #[serde(rename(deserialize = "ScheduleID"))]
-    id: u32,
+    pub id: u32,
 
     /// The ID of the reservation.
     #[serde(rename(deserialize = "ReservationID"))]
-    reservation_id: u32,
+    pub reservation_id: u32,
 
     /// The time when the reservation starts.
     #[serde(deserialize_with = "deserialize_time")]
-    start: Time,
+    pub start: Time,
 }

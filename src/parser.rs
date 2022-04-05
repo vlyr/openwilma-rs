@@ -1,14 +1,10 @@
-use utils::*;
-
 pub mod profile {
     use super::utils::*;
     use scraper::{Html, Selector};
 
     /// Documentation in progress.
     pub fn parse_name(document: &str) -> String {
-        let mut lines = document.split("\n");
-
-        let profile_line = filter_line("class=\"teacher\"", &mut lines).unwrap();
+        let profile_line = filter_line("class=\"teacher\"", &document).unwrap();
 
         let fragment = Html::parse_fragment(profile_line);
         let selector = Selector::parse("span").unwrap();
@@ -22,9 +18,7 @@ pub mod profile {
 
     /// Documentation in progress.
     pub fn parse_formkey(document: &str) -> String {
-        let mut lines = document.split("\n");
-
-        let line = filter_line("formkey", &mut lines).unwrap();
+        let line = filter_line("formkey", &document).unwrap();
 
         let fragment = Html::parse_fragment(line);
         let selector = Selector::parse("input").unwrap();
@@ -35,9 +29,7 @@ pub mod profile {
 
     /// Documentation in progress.
     pub fn parse_school(document: &str) -> String {
-        let mut lines = document.split("\n");
-
-        let line = filter_line("class=\"school\"", &mut lines).unwrap();
+        let line = filter_line("class=\"school\"", &document).unwrap();
 
         let fragment = Html::parse_fragment(line);
         let selector = Selector::parse("span").unwrap();
@@ -56,9 +48,7 @@ pub mod core {
 
     /// Documentation in progress.
     pub fn parse_identity(document: &str) -> String {
-        let mut lines = document.split("\n");
-
-        let line = filter_line("text-style-link", &mut lines).unwrap();
+        let line = filter_line("text-style-link", &document).unwrap();
 
         let fragment = Html::parse_fragment(line);
         let selector = Selector::parse("a").unwrap();
@@ -71,10 +61,11 @@ pub mod core {
 }
 
 mod utils {
-    pub fn filter_line<'a, I>(pattern: &str, lines: &mut I) -> Option<&'a str>
+    pub fn filter_line<'a, T>(pattern: &T, document: &'a T) -> Option<&'a str>
     where
-        I: Iterator<Item = &'a str>,
+        T: AsRef<str> + ?Sized,
     {
-        lines.find(|l| l.contains(pattern))
+        let mut lines = document.as_ref().split("\n");
+        lines.find(|l| l.contains(pattern.as_ref()))
     }
 }

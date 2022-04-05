@@ -27,7 +27,6 @@ pub struct Credentials<'a> {
 
 /// The main layer for interacting with Wilma.
 /// Documentation is a work-in-progress.
-#[derive(Clone, Debug)]
 pub struct Client {
     http: reqwest::Client,
     base_url: String,

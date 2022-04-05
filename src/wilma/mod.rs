@@ -3,6 +3,9 @@ use serde::{Deserialize, Serialize};
 pub mod user;
 pub use user::User;
 
+pub mod schedule;
+pub use schedule::Schedule;
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all(deserialize = "PascalCase"))]
 pub struct IndexResponse {

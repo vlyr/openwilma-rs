@@ -49,4 +49,17 @@ mod tests {
 
         println!("{:#?}", client.get_user_profile().await.unwrap());
     }
+
+    #[tokio::test]
+    async fn schedule() {
+        let credentials = Credentials {
+            username: &env::var("USERNAME").unwrap(),
+            password: &env::var("PASSWORD").unwrap(),
+            server: &env::var("SERVER").unwrap(),
+        };
+
+        let client = Client::login(credentials).await.unwrap();
+
+        client.get_user_schedule().await.unwrap();
+    }
 }

@@ -1,8 +1,7 @@
 // soon
-use crate::parser;
-use crate::wilma::User;
-use crate::Error as WilmaError;
-use crate::{utils, wilma::IndexResponse};
+use crate::{
+    parser, utils, wilma::IndexResponse, wilma::Schedule, wilma::User, Error as WilmaError,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str as string_to_json, Value};
 use std::collections::HashMap;
@@ -109,5 +108,27 @@ impl Client {
         let formkey = parser::parse_formkey(&response);
 
         Ok(User::new(name, school, formkey))
+    }
+
+    pub async fn get_user_schedule(&self) -> anyhow::Result<()> {
+        let profile = self.get_user_profile().await?;
+
+        let url = &format!(
+            "{}schedule/export/students/{}",
+            self.base_url.clone(),
+            profile.user_id()
+        );
+
+        let response = self.http.get(url).send().await?.text().await?;
+
+        let debug_json: Value = serde_json::from_str(&response).unwrap();
+
+        println!("{}", serde_json::to_string_pretty(&debug_json).unwrap());
+
+        let schedule: Schedule = serde_json::from_str(&response).unwrap();
+
+        println!("{:#?}", schedule);
+
+        Ok(())
     }
 }

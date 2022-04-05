@@ -1,4 +1,4 @@
-use serde::de::{self, Unexpected};
+use serde::de;
 use serde::{Deserialize, Deserializer, Serialize};
 use std::fmt;
 
@@ -148,6 +148,67 @@ where
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all(deserialize = "PascalCase"))]
+pub struct Group {
+    /// The caption of the group
+    caption: String,
+
+    class: String,
+
+    course_id: u32,
+
+    full_caption: String,
+
+    id: u32,
+
+    #[serde(default)]
+    rooms: Vec<Room>,
+
+    short_caption: String,
+
+    teachers: Vec<Teacher>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all(deserialize = "PascalCase"))]
+pub struct Room {
+    caption: String,
+    id: u32,
+    long_caption: String,
+    schedule_visible: bool,
+}
+
+impl Room {
+    /// The "abbreviation" (caption) of a room.
+    pub fn caption(&self) -> &String {
+        &self.caption
+    }
+
+    pub fn id(&self) -> u32 {
+        self.id
+    }
+
+    /// A more descriptive caption of the room.
+    pub fn long_caption(&self) -> &String {
+        &self.long_caption
+    }
+
+    /// Whether the room is visible on the schedule (I think!).
+    pub fn schedule_visible(&self) -> bool {
+        self.schedule_visible
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all(deserialize = "PascalCase"))]
+pub struct Teacher {
+    caption: String,
+    id: u32,
+    long_caption: String,
+    schedule_visible: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all(deserialize = "PascalCase"))]
 pub struct Reservation {
     /// The weekday the reservation is in.
     #[serde(rename(deserialize = "Day"))]
@@ -163,8 +224,8 @@ pub struct Reservation {
     #[serde(deserialize_with = "deserialize_time")]
     end: Time,
 
-    // todo
-    // groups: Vec<Group>
+    groups: Vec<Group>,
+
     /// The ID of the schedule the reservation is in.
     #[serde(rename(deserialize = "ScheduleID"))]
     id: u32,
@@ -177,42 +238,3 @@ pub struct Reservation {
     #[serde(deserialize_with = "deserialize_time")]
     start: Time,
 }
-
-/*"Class": "8B/D/F/G/H",
-  "Color": "#A6CAF0",
-  "Day": 5,
-  "End": "13:50",
-  "Groups": [
-    {
-      "Caption": "vMVALATMEDIA.8VAL",
-      "Class": "8B/D/F/G/H",
-      "CourseId": 2548,
-      "FullCaption": "Opiskelijan työvälineet ja mediataito",
-      "Id": 61285,
-      "Rooms": [
-        {
-          "Caption": "AT 2",
-          "Id": 31,
-          "LongCaption": "ATK-luokka",
-          "ScheduleVisible": true
-        }
-      ],
-      "ShortCaption": "vMVALATMEDIA.8VAL",
-      "Teachers": [
-        {
-          "Caption": "KLP",
-          "Id": 48,
-          "LongCaption": "Lähteenmäki-Paukku Katja",
-          "ScheduleVisible": true
-        }
-      ]
-    }
-  ],
-  "ReservationID": 2859,
-  "ScheduleID": 1213761319,
-  "Start": "13:05",
-  "X1": 40000,
-  "X2": 50000,
-  "Y1": 309,
-  "Y2": 354
-}*/
